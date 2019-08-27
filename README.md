@@ -34,3 +34,39 @@ snowflake ID 的结构是一个 64 bit 的 int 型数据。
 ## 改进
 由于前段js 中 number最长位53位, 为了保证js数值不被截断, 机器位使用8bit, 序列号使用6bit
 这样可以保证256个机器. 每毫秒生产64个序列号.
+
+## 使用
+```
+func TestSnowFlake(t *testing.T) {
+	worker, err := NewNode(1)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	ch := make(chan int64)
+	count := 100000
+	for i := 0; i < count; i++ {
+		go func() {
+			id := worker.Generate()
+			println(id)
+			ch <- id
+		}()
+	}
+
+	// defer close(ch)
+
+	m := make(map[int64]int)
+	for i := 0; i < count; i++ {
+		id := <-ch
+		_, ok := m[id]
+		if ok {
+			t.Error("ID is not unique!")
+			return
+		}
+		m[id] = i
+	}
+	fmt.Println("All", count, " successed!")
+}
+```
