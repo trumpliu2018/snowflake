@@ -1,6 +1,10 @@
 # snowFlake 雪花算法
 snowflake ID 算法是 twitter 使用的唯一 ID 生成算法，为了满足 Twitter 每秒上万条消息的请求，使每条消息有唯一、有一定顺序的 ID ，且支持分布式生成。
 
+## Install 
+
+`go get -u /github.com/trumpliu2018/snowflake`
+
 ## 原理
 某一台拥有独立标识(为机器分配独立id)的机器在1毫秒内生成带有不同序号的id 
 所以生成出来的id是具有时序性和唯一性的
